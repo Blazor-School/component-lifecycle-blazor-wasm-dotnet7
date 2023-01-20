@@ -2,7 +2,7 @@
 @inject IJSRuntime JSRuntime
 
 <h3>AfterRender</h3>
-<button class="btn btn-primary" @onclick="StateHasChanged">Trigger AfterRender</button>
+<button @onclick="StateHasChanged">Trigger AfterRender</button>
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender) => await JSRuntime.InvokeVoidAsync("alert", $"AfterRender phase triggered with firstRender is {firstRender}");
