@@ -1,0 +1,29 @@
+﻿@page "/demonstrate"
+@using ComponentLifecycle.Services
+@using ComponentLifecycle.Subcomponents
+@inject LoggingService LoggingService
+@implements IDisposable
+
+<div>
+    <div>
+        <button @onclick="() => ShowComponent = !ShowComponent">Toggle Sample Component</button>
+    </div>
+    <div>
+        @if (ShowComponent)
+        {
+            <SampleComponent />
+        }
+    </div>
+</div>
+
+@foreach (string log in LoggingService.Logs)
+{
+    <p><strong>@log</strong> called</p>
+}
+
+@code {
+    protected override void OnInitialized() => LoggingService.Logs.CollectionChanged += RefreshPage;
+    public void Dispose() => LoggingService.Logs.CollectionChanged -= RefreshPage;
+    private void RefreshPage(object? sender, EventArgs args) => InvokeAsync(StateHasChanged);
+    public bool ShowComponent { get; set; }
+}

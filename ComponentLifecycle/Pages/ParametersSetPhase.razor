@@ -1,0 +1,33 @@
+﻿@page "/parameters-set"
+@using ComponentLifecycle.Subcomponents
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<h3>ParametersSetPhase</h3>
+Current Url: @NavigationManager.Uri
+<div>
+    <SampleChildComponent ComponentParameter="@Parameter" />
+    <button @onclick="() => Parameter = RandomString()">Update ComponentParameter</button>
+</div>
+<div>
+    <div>Url Parameter: @UrlParameter</div>
+    <a href="/parameters-set?UrlParameter=@RandomString()">Update UrlParameter</a>
+</div>
+
+@code {
+    public string Parameter { get; set; } = "";
+    private Random _random = new Random();
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? UrlParameter { get; set; } = "";
+
+    protected override void OnParametersSet() => JSRuntime.InvokeVoidAsync("alert", "ParametersSet phase of the PARENT component triggered.");
+
+    private string RandomString()
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        return new string(Enumerable.Repeat(chars, 5).Select(s => s[_random.Next(s.Length)]).ToArray());
+    }
+}

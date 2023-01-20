@@ -1,0 +1,21 @@
+﻿@using ComponentLifecycle.Services
+@inject LoggingService LoggingService
+@implements IDisposable
+
+<h3>Sample Component</h3>
+
+@code {
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        LoggingService.Logs.Add("SetParametersAsync");
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected override void OnAfterRender(bool firstRender) => LoggingService.Logs.Add("OnAfterRender");
+    protected override async Task OnAfterRenderAsync(bool firstRender) => LoggingService.Logs.Add("OnAfterRenderAsync");
+    protected override void OnInitialized() => LoggingService.Logs.Add("OnInitialized");
+    protected override async Task OnInitializedAsync() => LoggingService.Logs.Add("OnInitializedAsync");
+    protected override void OnParametersSet() => LoggingService.Logs.Add("OnParametersSet");
+    protected override async Task OnParametersSetAsync() => LoggingService.Logs.Add("OnParametersSetAsync");
+    public void Dispose() => LoggingService.Logs.Add("Dispose");
+}
